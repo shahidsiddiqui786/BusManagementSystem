@@ -1,0 +1,33 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+  
+  <h2 class="page-header"><%= bus.name %></h2>
+  <div class="details">
+    <div>
+      <div class="details-btn-grid">
+        <a class="btn btn-primary" href="/buses/<%= bus.idbus %>/edit">Edit</a>
+        <%- include('../partials/deleteForm', { url: `/buses/${bus.idbus}` }) %>
+        <a class="btn btn-primary " href="/conductors/<%= conductor.idconductor %>">View Bus Conductor</a>
+        <a class="btn btn-primary " href="/drivers/<%= driver.iddriver %>">View Bus Driver</a>
+      </div>
+    </div>
+    <div class="details-grid">
+      <div class="details-label">Driver:</div>
+      <div><%= driver.name %></div>
+      <div class="details-label">Conductor:</div>
+      <div><%= conductor.name %></div>
+      <div class="details-label">start point:</div>
+      <div><%= bus.from %></div>
+      <div class="details-label">End point:</div>
+      <div><%= bus.to %></div>
+      <div class="details-label">People accomodation capacity:</div>
+      <div><%= bus.capacity %></div>
+      <div class="details-label">People Travelling through:</div>
+      <div><%= bus.reserved %></div>
+    </div>
+  </div>
+
+</div>
+

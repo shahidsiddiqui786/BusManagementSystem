@@ -1,0 +1,49 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+  
+  <h2 class="page-header">New Bus</h2>
+  <form action="/buses/add" method="POST">
+    <div class="form-row">
+      <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name">
+      </div>
+      <div class="form-item">
+        <label>Capacity</label>
+        <input type="text" name="capacity">
+      </div>
+    </div>
+  
+    <div class="form-row">
+      <div class="form-item">
+        <label>From</label>
+        <input type="text" name="from">
+      </div>
+      <div class="form-item">
+        <label>To</label>
+        <input type="text" name="to">
+      </div>
+    </div>
+  
+    <div class="form-row">
+      <div class="form-item">
+        <label>Conductor</label>
+        <select name="conductor">
+          <option selected label="select_conductor"></option>
+          <% conductors.forEach(conductor => { %>
+              <option label="<%= conductor.name %>" value="<%= conductor.idconductor %>">
+          <% }) %>
+        </select>
+      </div> 
+    </div>
+    
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/buses">Cancel</a>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+
+</div>
+

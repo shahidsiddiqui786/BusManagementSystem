@@ -1,0 +1,17 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+  
+  <h2 class="page-header">Edit Conductor</h2>
+  <form action="/conductors/<%= conductor.idconductor %>?_method=PUT" method="POST">
+    <% console.log(conductor) %> 
+    <%- include('_form_fields') %>
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/conductors">Cancel</a>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+  </form>
+
+</div>
+

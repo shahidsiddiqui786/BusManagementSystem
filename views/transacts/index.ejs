@@ -1,0 +1,17 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+   
+  <% transacts.forEach(transact => { %>
+    <div class="general-row">
+      <div class="general-name"><%= transact.tid %></div>
+      
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/transacts/<%= transact.idtransact %>">View</a>
+      </div>
+    </div>
+  <% }) %>
+
+</div>
+

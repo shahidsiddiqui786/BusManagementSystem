@@ -1,0 +1,48 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+  
+  
+  <h2 class="page-header">Transaction ID <%= tid %> &nbsp;&nbsp;&nbsp; Time <%= time %></h2>
+  <form action="/transacts/add" method="POST">
+    <div class="form-row">
+      <div class="form-item">
+        <label>Passanger</label>
+        <select name="passanger" required>
+          <option selected label="select_Passanger"></option>
+          <% passangers.forEach(passanger => { %>
+              <option label="<%= passanger.name %>" value="<%= passanger.idpassanger %>">
+          <% }) %>
+        </select>
+      </div> 
+
+      <div class="form-item">
+        <label>Bus</label>
+        <select name="bus" required>
+          <option selected label="select_bus"></option>
+          <% buses.forEach(bus => { %>
+              <option label="<%= bus.name %>" value="<%= bus.idbus %>">
+          <% }) %>
+        </select>
+      </div> 
+    </div>
+  
+    <div class="form-row">
+      <div class="form-item">
+        <label>No of Tickes</label>
+        <input type="number" name="noofticket" required>
+
+        <input type="hidden" name="tid" value="<%= tid %> ">
+        <input type="hidden" name="time" value="<%= time %> ">
+      </div>
+    </div>
+    
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/transacts">Cancel</a>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+
+</div>
+

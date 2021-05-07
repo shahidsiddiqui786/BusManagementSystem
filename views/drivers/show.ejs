@@ -1,0 +1,13 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+   
+  <h2 class="page-header"><%= driver.name %></h2>
+  <div class="btn-row">
+    <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>/edit">Edit</a>
+    <%- include('../partials/deleteForm',
+                { url: `/drivers/${driver.iddriver}` }) %>
+  </div>
+
+</div>

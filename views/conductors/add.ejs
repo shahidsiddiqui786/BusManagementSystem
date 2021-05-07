@@ -1,0 +1,38 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+   
+  <h2 class="page-header">New Conductor</h2>
+  <form action="/conductors/add" method="POST">
+    <div class="form-row">
+      <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name">
+      </div>
+      <div class="form-item">
+        <label>Password</label>
+        <input type="password" name="password">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-item">
+        <label>Conductor</label>
+        <select name="driver">
+          <option selected label="select_driver"></option>
+          <% drivers.forEach(driver => { %>
+              <option label="<%= driver.name %>" value="<%= driver.iddriver %>">
+          <% }) %>
+        </select>
+      </div>
+    </div>
+    
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/conductors">Cancel</a>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+
+</div>
+

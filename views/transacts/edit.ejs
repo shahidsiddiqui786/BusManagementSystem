@@ -1,0 +1,53 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+  
+  <h2 class="page-header">Edit Bus Information</h2>
+  <form action="/buses/<%= bus.idbus %>?_method=PUT" method="POST">
+
+    <div class="form-row">
+      <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= bus.name %>">
+      </div>
+      <div class="form-item">
+        <label>Capacity</label>
+        <input type="text" name="capacity" value="<%= bus.capacity %>">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-item">
+        <label>From</label>
+        <input type="text" name="from" value="<%= bus.from %>">
+      </div>
+      <div class="form-item">
+        <label>To</label>
+        <input type="text" name="to" value="<%= bus.to %>">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-item">
+        <label>Conductor</label>
+        <select name="conductor">
+          <% conductors.forEach(conductor => { %>
+            <% if (conductor.idconductor === bus.idconductor) { %>
+              <option selected label="<%= conductor.name %>" value="<%= conductor.idconductor %>">
+            <% } else { %>
+              <option label="<%= conductor.name %>" value="<%= conductor.idconductor %>">
+            <% } %>
+          <% }) %>
+        </select>
+      </div> 
+    </div>
+    
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/buses">Cancel</a>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+  </form>
+
+</div>
+

@@ -1,0 +1,25 @@
+<%- include('../partials/header.ejs') %>
+<div class="inner-container">
+  <%- include('../partials/errorMessage.ejs') %>
+  <%- include('../partials/greeting.ejs') %>
+   
+  <h2 class="page-header">New Passanger</h2>
+  <form action="/passangers/add" method="POST">
+    <div class="form-row">
+      <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name">
+      </div>
+      <div class="form-item">
+        <label>Password</label>
+        <input type="password" name="password">
+      </div>
+    </div>
+    
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-danger" href="/">Cancel</a>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+
+</div>
