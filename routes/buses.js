@@ -43,7 +43,7 @@ router.get("/:idbus",(req,res) => {
         })
     })
     .catch((err) => {
-      console.log(err)
+      fetchBusesAndRenderIndex(res,'',err)
     })
 })
 
@@ -78,60 +78,28 @@ router.get('/:idbus/edit',  (req, res) => {
 })
 
 router.put("/:idbus", (req,res) => {
-  const name = req.body.name
-  const capacity = req.body.capacity
-  const from  = req.body.from
-  const to  =  req.body.to
-  const idconductor = req.body.conductor
-  const idbus = req.params.idbus
-  db.query(
-    "UPDATE bus SET `name` = ?, `capacity` = ?, `from` = ?, `to` = ?, `idconductor` = ? WHERE `idbus` = ?",
-    [name,capacity,from,to,idconductor,idbus],
-    (err,bus) => {
-      if(err){
-        renderIndexPage(res,'','',err.sqlMessage,'')
-      }
-      else {
-        res.redirect(`/buses/${idbus}`)
-      }
-    }
-  )
+  const bus = [req.body.name, req.body.capacity, req.body.from, req.body.to,req.body.conductor,req.params.idbus]
+  updateBus(bus)
+   .then((result) => {
+     fetchBusesAndRenderIndex(res,'','',"successfully Bus Updated!")
+   })
+   .catch((err) => {
+      fetchBusesAndRenderIndex(res,'',err)
+   })
 })
 
 router.delete("/:idbus", (req, res) => {
-  const idbus = req.params.idbus;
-  db.query("DELETE FROM bus WHERE idbus = ?", idbus, (err, result) => {
-    if (err) {
-      db.query("SELECT * FROM bus WHERE idbus = ?", req.params.idbus, (err1, bus) => {
-          if(err1) console.log(err1)
-          else {
-            const idconductor = bus[0].idconductor
-            db.query("SELECT * FROM conductor WHERE idconductor = ?",idconductor,(err2,conductor) => {
-              if(err2) console.log(err2)
-              else {
-                console.log(conductor)
-                const iddriver = conductor[0].iddriver
-                db.query("SELECT * FROM driver WHERE iddriver = ?",iddriver,(err2,driver) => {
-                  console.log(driver)
-                  res.render('buses/show',{
-                    bus : bus[0],
-                    conductor:conductor[0],
-                    driver:driver[0],
-                    errorMessage : err.sqlMessage
-                  })
-                })
-              }
-            })
-          }
-        })
-    } 
-    else {
-      res.render('/buses',{
-        greeting : "successfully deleted"
-      })
-    }
-  })
+  deleteBus(req.params.idbus)
+   .then((result) => {
+      fetchBusesAndRenderIndex(res,'','',"successfully Bus deleted from record")
+   })
+   .catch((err) => {
+      fetchBusesAndRenderIndex(res,'',err)
+   })
 })
+
+
+////////////..............Helper functions......................//////////////////
 
 function renderIndexPage(res, buses, searchOptions, errorMessage = '',greeting = ''){
     res.render('buses/index', {
@@ -247,6 +215,40 @@ function postBus(bus){
     db.query(
     "INSERT INTO bus (`name`,`idconductor`,`capacity`,`reserved`,`from`,`to`) VALUES (?,?,?,?,?,?)",
     bus,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function updateBus(bus){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "UPDATE bus SET `name` = ?, `capacity` = ?, `from` = ?, `to` = ?, `idconductor` = ? WHERE `idbus` = ?",
+    bus,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function deleteBus(idbus){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "DELETE FROM bus WHERE idbus = ?",
+    idbus,
       (err, result) => {
       if (err) {
         reject(err.sqlMessage)
