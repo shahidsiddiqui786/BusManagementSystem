@@ -13,8 +13,7 @@ const db = mysql.createConnection({
 ////////////..............Driver routes......................//////////////////
 
 router.get('/add',(req, res) => {
-  // console.log("ham")
-  res.render('drivers/add')
+   res.render('drivers/add')
 })
 
 router.get("", (req, res) => {
@@ -22,97 +21,171 @@ router.get("", (req, res) => {
   if (req.query.name != null && req.query.name !== '') {
     searchOptions.name = req.query.name
   }
-  // searchOptions.name = 's'
-  console.log(searchOptions.name)
-  db.query("select * from driver where name LIKE ?",
-    [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
-    (err, result) => {
-    if (err) {
-      console.log(err)
-    } else {
-      //console.log(result)
-      res.render('drivers/index', {
-        drivers: result,
-        searchOptions: req.query
-      })
-    }
-  })
+  fetchDriversAndRenderIndex(res,searchOptions)
 })
 
 router.get("/:iddriver",(req,res) => {
-    db.query("SELECT * FROM driver WHERE iddriver = ?", req.params.iddriver, (err, driver) => {
-    //  console.log(driver)
-      if(err) console.log(err)
-      else {
-      res.render('drivers/show',{
-        driver : driver[0]
-      })
-      }
+  fetchDriver(req.params.iddriver)
+    .then((result) => {
+      renderDriverPage(res,result)
+    })
+    .catch((err) =>{
+      fetchDriversAndRenderIndex(res,'',err)
     })
 })
 
 router.post("/add", (req, res) => {
-  const name = req.body.name   
-    db.query(
-    "INSERT INTO driver (name) VALUES (?)",
-    [name],
-      (err, result) => {
-      if (err) {
-        console.log(err)
-      } else {
-        // console.log(result)
-        res.redirect('/drivers')
-      }
+  postDriver(req.body.name)
+    .then((result) => {
+      fetchDriversAndRenderIndex(res,'','',"successfully Driver added")
     })
+    .catch((err) => {
+      res.render('drivers/add')
+    }) 
 })
 
 router.get('/:iddriver/edit',  (req, res) => {
-
-  db.query("SELECT * FROM driver WHERE iddriver = ?", req.params.iddriver, (err, driver) => {
-    if(err){
-      console.log(err)
-    }
-    else {
+   fetchDriver(req.params.iddriver)
+    .then((result) => {
       res.render('drivers/edit',{
-        driver : driver[0],
-        greeting:"rewrite only those filed u want to change"
+        driver: result
       })
-    }
-  })
+    })
+    .catch((err) => {
+      fetchDriversAndRenderIndex(res,'',err)
+    })
 })
 
 router.put("/:iddriver", (req,res) => {
-  const name = req.body.name
-  const iddriver = req.params.iddriver
-  db.query(
-    "UPDATE driver SET name = ? WHERE iddriver = ?",[name,iddriver],(err,driver) => {
-      if(err) console.log(err)
-      else {
-        console.log(driver)
-        res.redirect(`/drivers/${iddriver}`)
-      }
-    }
-  )
+  const driver = [req.body.name, req.params.iddriver]
+  updateDriver(driver)
+   .then((result) => {
+     fetchDriversAndRenderIndex(res,'','',"successfully Driver Updated!")
+   })
+   .catch((err) => {
+    fetchDriversAndRenderIndex(res,'',err)
+   })
 })
 
 router.delete("/:iddriver", (req, res) => {
-  const iddriver = req.params.iddriver;
-  db.query("DELETE FROM driver WHERE iddriver = ?", iddriver, (err, result) => {
-    if (err) {
-      console.log(err)
-      db.query("SELECT * FROM driver WHERE iddriver = ?", req.params.iddriver, (err1, driver) => {
-        if(err1) console.log(err)
-        else {
-        res.render('drivers/show',{
-          driver : driver[0],
-          errorMessage:err.sqlMessage.split(":")[0]
-        })
-        }
-      })
-    } else {
-      res.redirect('/drivers')
-    }
-  })
+  deleteDriver(req.params.iddriver)
+   .then((result) => {
+      fetchDriversAndRenderIndex(res,'','',"successfully Driver deleted from record")
+   })
+   .catch((err) => {
+      fetchDriversAndRenderIndex(res,'',err)
+   })
 })
+
+////////////..............Helper functions......................//////////////////
+
+function renderIndexPage(res, drivers, searchOptions, errorMessage = '',greeting = ''){
+  res.render('drivers/index', {
+    drivers : drivers, 
+    searchOptions: searchOptions,
+    errorMessage : errorMessage,
+    greeting : greeting
+  })
+}
+
+function renderDriverPage(res,driver,errorMessage = '',greeting = ''){
+  res.render('drivers/show',{
+    driver:driver,
+    errorMessage:errorMessage,
+    greeting:greeting
+  })
+}
+
+function fetchDriver(iddriver){
+  const my = new Promise((resolve,reject) => {
+    db.query("SELECT * FROM driver WHERE iddriver = ?",iddriver, (err, driver) => {
+      if(err) {
+        reject(err.sqlMessage)
+      }
+      else{
+        resolve(driver[0])
+      }
+    })
+  })
+  return my
+}
+
+function fetchDrivers(searchOptions){
+  const my = new Promise((resolve,reject) => {
+    db.query("select * from driver where name LIKE ?",
+      [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function postDriver(driver){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "INSERT INTO driver (`name`) VALUES (?)",
+    driver,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function updateDriver(driver){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "UPDATE driver SET `name` = ? WHERE `iddriver` = ?",
+    driver,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function deleteDriver(iddriver){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "DELETE FROM driver WHERE iddriver = ?",
+    iddriver,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function fetchDriversAndRenderIndex(res,searchOptions,errorMessage = '',greeting = ''){
+  fetchDrivers(searchOptions)
+  .then((result) => {
+      renderIndexPage(res,result,searchOptions,errorMessage,greeting)
+  })
+  .catch((err) => {
+      renderIndexPage(res,'',searchOptions,err,'')
+  })
+}
+
 
 module.exports = router
