@@ -1,6 +1,5 @@
 const express = require("express")
 const app = express()
-const mysql = require("mysql")
 
 app.use(express.json())
 const expressLayouts = require('express-ejs-layouts')

@@ -54,7 +54,7 @@ router.post("/add", (req, res) => {
 router.get('/:idconductor/edit',  (req, res) => {
   fetchConductor(req.params.idconductor)
   .then((result) => {
-    fetchDrivers('')
+    fetchDrivers()
      .then((result1) => {
        res.render('conductors/edit',{
          conductor:result,
@@ -140,7 +140,7 @@ function fetchDriver(iddriver){
 }
 
 
-function fetchConductors(searchOptions){
+function fetchConductors(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from conductor where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -156,7 +156,7 @@ function fetchConductors(searchOptions){
   return my
 }
 
-function fetchDrivers(searchOptions){
+function fetchDrivers(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from driver where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -234,7 +234,7 @@ function fetchConductorsAndRenderIndex(res,searchOptions,errorMessage = '',greet
 }
 
 function fetchDriversAndRenderAddConductor(res,errorMessage = '',greeting = ''){
-  fetchDrivers('')
+  fetchDrivers()
   .then((result) => {
       res.render('conductors/add', {
         drivers:result,

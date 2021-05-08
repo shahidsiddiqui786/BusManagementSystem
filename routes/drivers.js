@@ -110,7 +110,7 @@ function fetchDriver(iddriver){
   return my
 }
 
-function fetchDrivers(searchOptions){
+function fetchDrivers(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from driver where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
