@@ -61,7 +61,7 @@ router.post("/add", (req, res) => {
 router.get('/:idbus/edit',  (req, res) => {
   fetchBus(req.params.idbus)
    .then((result) => {
-     fetchConductors('')
+     fetchConductors()
       .then((result1) => {
         res.render('buses/edit',{
           bus:result,
@@ -162,7 +162,7 @@ function fetchDriver(iddriver){
   return my
 }
 
-function fetchBuses(searchOptions){
+function fetchBuses(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from bus where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -178,7 +178,7 @@ function fetchBuses(searchOptions){
   return my
 }
 
-function fetchConductors(searchOptions){
+function fetchConductors(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from conductor where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -194,7 +194,7 @@ function fetchConductors(searchOptions){
   return my
 }
 
-function fetchDrivers(searchOptions){
+function fetchDrivers(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from driver where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -272,7 +272,7 @@ function fetchBusesAndRenderIndex(res,searchOptions,errorMessage = '',greeting =
 }
 
 function fetchConductorsAndRenderAddBus(res,errorMessage = '',greeting = ''){
-  fetchConductors('')
+  fetchConductors()
    .then((result) => {
       res.render('buses/add', {
         conductors:result,

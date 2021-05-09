@@ -27,7 +27,13 @@ const db = mysql.createConnection({
   router.get("/:idpassanger",(req,res) => {
     fetchPassanger(req.params.idpassanger)
       .then((result) => {
-        renderPassangerPage(res,result)
+        fetchPassangerTickets(req.params.idpassanger)
+        .then((result1) => {
+          renderPassangerPage(res,result,result1)
+        })
+        .catch((err) => {
+          fetchPassangersAndRenderIndex(res,'',err)
+        })
       })
       .catch((err) =>{
         fetchPassangersAndRenderIndex(res,'',err)
@@ -88,9 +94,10 @@ function renderIndexPage(res, passangers, searchOptions, errorMessage = '',greet
   })
 }
 
-function renderPassangerPage(res,passanger,errorMessage = '',greeting = ''){
+function renderPassangerPage(res,passanger,tickets,errorMessage = '',greeting = ''){
   res.render('passangers/show',{
     passanger:passanger,
+    tickets : tickets,
     errorMessage:errorMessage,
     greeting:greeting
   })
@@ -110,7 +117,7 @@ function fetchPassanger(idpassanger){
   return my
 }
 
-function fetchPassangers(searchOptions){
+function fetchPassangers(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
     db.query("select * from passanger where name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
@@ -120,6 +127,20 @@ function fetchPassangers(searchOptions){
       } 
       else {
         resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function fetchPassangerTickets(idpassanger){
+  const my = new Promise((resolve,reject) => {
+    db.query("SELECT * FROM transact WHERE pid = ?",idpassanger, (err, passanger) => {
+      if(err) {
+        reject(err.sqlMessage)
+      }
+      else{
+        resolve(passanger)
       }
     })
   })

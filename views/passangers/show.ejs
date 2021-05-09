@@ -4,10 +4,29 @@
     <%- include('../partials/greeting.ejs') %>
      
     <h2 class="page-header"><%= passanger.name %></h2>
-    <div class="btn-row">
-      <a class="btn btn-primary" href="/passangers/<%= passanger.idpassanger %>/edit">Edit</a>
-      <%- include('../partials/deleteForm',
-                  { url: `/passangers/${passanger.idpassanger}` }) %>
+    <div class="details">
+      <div>
+        <div class="details-btn-grid">
+          <div class="btn-row">
+            <a class="btn btn-primary" href="/passangers/<%= passanger.idpassanger %>/edit">Edit</a>
+            <%- include('../partials/deleteForm',
+                        { url: `/passangers/${passanger.idpassanger}` }) %>
+          </div>
+        </div>
+      </div>
+      <div class="details-grid">
+        <% tickets.forEach(ticket => { %>
+          <div class="details-label">Transacation ID:</div>
+            <div><%= ticket.tid %></div>
+            <div class="details-label">passanger ID:</div>
+            <div><%= ticket.pid %></div>
+            <div class="details-label">Bus ID:</div>
+            <div><%= ticket.idbus %></div>
+            <div class="details-label">No Of Ticket Booked:</div>
+            <div><%= ticket.ticket %></div>
+            <div class="details-label">........................</div>
+            <div>.........................</div>
+        <% }) %>
+      </div>
     </div>
-  
   </div>
