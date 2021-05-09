@@ -3,7 +3,7 @@
   <%- include('../partials/errorMessage.ejs') %>
   <%- include('../partials/greeting.ejs') %>
    
-  <% transacts.forEach(transact => { %>
+  <% transacts && transacts.forEach(transact => { %>
     <div class="general-row">
       <div class="general-name"><%= transact.tid %></div>
       

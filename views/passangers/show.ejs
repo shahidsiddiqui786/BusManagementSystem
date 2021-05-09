@@ -16,16 +16,25 @@
       </div>
       <div class="details-grid">
         <% tickets.forEach(ticket => { %>
-          <div class="details-label">Transacation ID:</div>
+            <div class="details-label">Transacation ID:</div>
             <div><%= ticket.tid %></div>
+            <div class="details-label">Time:</div>
+            <div><%= ticket.time %></div>
             <div class="details-label">passanger ID:</div>
             <div><%= ticket.pid %></div>
             <div class="details-label">Bus ID:</div>
             <div><%= ticket.idbus %></div>
             <div class="details-label">No Of Ticket Booked:</div>
             <div><%= ticket.ticket %></div>
-            <div class="details-label">........................</div>
-            <div>.........................</div>
+            <form action = "/transacts/remove/<%= ticket.idtransact %>"  method = "POST">
+              <div class="form-row form-row-end btn-row">
+                <a class="btn btn-primary" href="/buses/<%= ticket.idbus %>">Check Bus</a>
+                <button class="btn btn-danger" type="submit">Cancel Ticket</button>
+              </div>
+            </form>
+            <div></div>
+            <div class="details-label"></div>
+            <div></div>
         <% }) %>
       </div>
     </div>

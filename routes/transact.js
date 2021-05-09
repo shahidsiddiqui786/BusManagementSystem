@@ -32,8 +32,12 @@ router.get("/:idtransact",(req,res) => {
 })
 
 router.post("/add", (req, res) => {
-  const ticket = [ req.body.tid, req.body.passanger, req.body.bus, req.body.noofticket]
+  const ticket = [ req.body.tid, req.body.passanger, req.body.bus, req.body.noofticket,req.body.time]
   bookTicket(res,ticket) 
+})
+
+router.post("/remove/:idtransact", (req, res) => {
+  cancelTicket(res,req.params.idtransact)
 })
 
 ////////////..............Helper functions......................//////////////////
@@ -63,9 +67,10 @@ function renderTransactPage(res,transact ,errorMessage = '',greeting = ''){
   })
 }
 
-function renderPassangerPage(res,passanger,errorMessage = '',greeting = ''){
+function renderPassangerPage(res,passanger,tickets,errorMessage = '',greeting = ''){
   res.render('passangers/show',{
     passanger:passanger,
+    tickets : tickets,
     errorMessage:errorMessage,
     greeting:greeting
   })
@@ -198,7 +203,7 @@ function fetchTransaction(idtransact){
         reject(err.sqlMessage)
       }
       else{
-        resolve(passanger[0])
+        resolve(transact[0])
       }
     })
   })
@@ -221,6 +226,19 @@ function fetchTransactions(searchOptions = ''){
   return my
 }
 
+function fetchPassangerTickets(idpassanger){
+  const my = new Promise((resolve,reject) => {
+    db.query("SELECT * FROM transact WHERE pid = ?",idpassanger, (err, passanger) => {
+      if(err) {
+        reject(err.sqlMessage)
+      }
+      else{
+        resolve(passanger)
+      }
+    })
+  })
+  return my
+}
 
 function bookTicket(res,ticket){
   const tt = ticket[3];
@@ -249,18 +267,27 @@ function bookTicket(res,ticket){
           console.log("success")
           fetchPassanger(ticket[1])
           .then((result3) => {
-            renderPassangerPage(res,result3,'','successfully ticket booked')
+            fetchPassangerTickets(ticket[1])
+            .then((result4) => {
+              renderPassangerPage(res,result3,result4,'','successfully ticket booked')
+            })
+            .catch((err) => {
+              console.log(err)
+              renderBusIndexPage(res,'','','',"successfully ticket booked")
+            })
           })
           .catch((err) => {
+            console.log(err)
             renderBusIndexPage(res,'','','',"successfully ticket booked")
           })
         })
         .catch((err) => {
+          console.log(err)
           renderBusIndexPage(res,'','','',"successfully ticket booked")
         })
       })
       .catch((err) => {
-        renderBusIndexPage(res,'','','',err)
+        renderBusIndexPage(res,'','',err)
       })
      }
   })
@@ -273,7 +300,7 @@ function bookTicket(res,ticket){
 function postTicketData(ticket){
   const my = new Promise((resolve,reject) => {
     db.query(
-    "INSERT INTO transact (`tid`,`pid`,`idbus`,`ticket`) VALUES (?,?,?,?)",
+    "INSERT INTO transact (`tid`,`pid`,`idbus`,`ticket`,`time`) VALUES (?,?,?,?,?)",
     ticket,
       (err, result) => {
       if (err) {
@@ -304,22 +331,76 @@ function updateBus(bus){
   return my
 }
 
-function deleteBus(idbus){
-const my = new Promise((resolve,reject) => {
-  db.query(
-  "DELETE FROM bus WHERE idbus = ?",
-  idbus,
-    (err, result) => {
-    if (err) {
-      reject(err.sqlMessage)
-    } 
-    else {
-      resolve(result)
-    }
+function cancelTicket(res,idtransact){
+  fetchTransaction(idtransact)
+  .then((result) => {
+    //transact id field ko delete krna
+    deleteTransact(idtransact)
+    .then((result1) => {
+      //bus field ko update krna
+      fetchBus(result.idbus)
+      .then((result2) => {
+        const reserve = parseInt(result2.reserved) - parseInt(result.ticket)
+        const cap = parseInt(result2.capacity) + parseInt(result.ticket)
+        const bus = [result2.name, cap, reserve, result2.from, result2.to, result2.idconductor, result.idbus]
+        updateBus(bus)
+        .then((result4) => {
+          console.log("cancel success")
+          bookingCancelRedirect(res,result.pid)
+        })
+        .catch((err) => {
+          bookingCancelRedirect(res,result.pid)
+        })
+      })
+      .catch((err) => {
+        bookingCancelRedirect(res,result.pid)
+      })
+    })
+    .catch((err) => {
+      bookingCancelRedirect(res,result.pid,err)
+    })
   })
-})
-return my
+  .catch((err) => {
+    bookingCancelRedirect(res,result.pid,err)
+  })
 }
+
+function deleteTransact(idtransact){
+  const my = new Promise((resolve,reject) => {
+    db.query(
+    "DELETE FROM transact WHERE idtransact = ?",
+    idtransact,
+      (err, result) => {
+      if (err) {
+        reject(err.sqlMessage)
+      } 
+      else {
+        resolve(result)
+      }
+    })
+  })
+  return my
+}
+
+function bookingCancelRedirect(res,pid,err = ''){
+  var msg =  "successfully booking canceled"
+  if(err) msg = ''
+  console.log(msg)
+  fetchPassanger(pid)
+  .then((result) => {
+    fetchPassangerTickets(pid)
+    .then((result1) => {
+      renderPassangerPage(res,result,result1,err,msg)
+    })
+    .catch((err) => {
+      renderPassangerPage(res,result,'',err,msg)
+    })
+  })
+  .catch((err) =>{
+    renderPassangerPage(res,'','',err,msg)
+  })
+}
+
 
 function fetchTransactionsAndRenderIndex(res,searchOptions,errorMessage = '',greeting = ''){
   fetchTransactions(searchOptions)
@@ -350,7 +431,7 @@ function fetchRequireAndRenderAddTransact(res, errorMessage = '',greeting = ''){
             buses : result,
             passangers : result1,
             tid : uuid(),
-            time : new Date().toLocaleString(),
+            time : new Date().toString(),
             errorMessage : errorMessage,
             greeting : greeting
           })
