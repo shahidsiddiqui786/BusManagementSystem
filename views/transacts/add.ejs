@@ -4,7 +4,13 @@
   <%- include('../partials/greeting.ejs') %>
   
   
-  <h2 class="page-header">Transaction ID <%= tid %> &nbsp;&nbsp;&nbsp; Time <%= time %></h2>
+  <h2 class="page-header">Book Tickets</h2>
+  <div class="details-grid">
+    <div class="details-label">Transaction ID: <%= tid %></div>
+  </div>
+  <br>
+  <div class="time"><%= time %></div>
+  <br>
   <form action="/transacts/add" method="POST">
     <div class="form-row">
       <div class="form-item">
@@ -30,7 +36,7 @@
   
     <div class="form-row">
       <div class="form-item">
-        <label>No of Tickes</label>
+        <label>No of Tickets</label>
         <input type="number" name="noofticket" required>
 
         <input type="hidden" name="tid" value="<%= tid %> ">
@@ -39,7 +45,7 @@
     </div>
     
     <div class="form-row form-row-end btn-row">
-      <a class="btn btn-danger" href="/transacts">Cancel</a>
+      <a class="btn btn-danger" href="/buses">Cancel</a>
       <button class="btn btn-primary" type="submit">Create</button>
     </div>
   </form>

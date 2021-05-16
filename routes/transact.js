@@ -212,7 +212,7 @@ function fetchTransaction(idtransact){
 
 function fetchTransactions(searchOptions = ''){
   const my = new Promise((resolve,reject) => {
-    db.query("select * from transact where name LIKE ?",
+    db.query("select * from transact WHERE name LIKE ?",
       [searchOptions.name === undefined ? '%' : searchOptions.name+'%'] ,
       (err, result) => {
       if (err) {
@@ -253,7 +253,7 @@ function bookTicket(res,ticket){
   fetchBus(ticket[2])
   .then((result) => {
      if(result.capacity < tt){
-      fetchRequireAndRenderAddTransact(res,"Ticket limit exceeded")
+      fetchRequireAndRenderAddTransact(res,"Bus already full!")
       return
      }
      else{

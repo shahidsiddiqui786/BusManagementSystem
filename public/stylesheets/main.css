@@ -52,3 +52,8 @@ body {
 .general-name {
   font-size: 1.5rem;
 }
+
+.time {
+  color: rgb(255, 255, 255);
+  text-align: end;
+}
