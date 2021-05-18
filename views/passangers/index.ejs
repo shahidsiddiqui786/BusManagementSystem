@@ -1,32 +1,40 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-    <%- include('../partials/errorMessage.ejs') %>
-    <%- include('../partials/greeting.ejs') %>
-    
-    <h2 class="page-header">Search Passangers</h2>
-    <form action="/passangers" method="GET">
-      <div class="form-row">
-        <div class="form-item">
-          <label>Name</label>
-          <input type="text" name="name" value="<%= searchOptions.name %>">
-        </div>
-      </div>
-      <div class="form-row form-row-end">
-        <button class="btn btn-primary" type="submit">Search</button>
-      </div>
-    </form>
-    <br>
-    <% passangers.forEach(passanger => { %>
-      <div class="general-row">
-        <div class="general-name"><%= passanger.name %></div>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="/passangers/<%= passanger.idpassanger %>">View</a>
-          <%- include('../partials/deleteForm',
-                      { url: `/passangers/${passanger.idpassanger}` }) %>
-        </div>
-      </div>
-    <% }) %>
-  
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+
+  <div class="flex justify-between items-center">
+    <h2 class="page-header">Search Passengers</h2>
+    <a
+      class="px-5 py-2 rounded-full bg-gray-200 text-blue-600"
+      href="/passangers/add"
+      >+ Add Passenger</a
+    >
   </div>
-  
-  
+  <form action="/passangers" method="GET">
+    <div class="form-row">
+      <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= searchOptions.name %>" />
+      </div>
+    </div>
+    <div class="form-row form-row-end">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+  </form>
+  <br />
+  <% passangers.forEach(passanger => { %>
+  <div
+    class="general-row bg-blue-500 bg-opacity-30 p-3 rounded-xl items-center"
+  >
+    <div class="general-name"><%= passanger.name %></div>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/passangers/<%= passanger.idpassanger %>"
+        >View</a
+      >
+      <%- include('../partials/deleteForm', { url:
+      `/passangers/${passanger.idpassanger}` }) %>
+    </div>
+  </div>
+  <% }) %>
+</div>

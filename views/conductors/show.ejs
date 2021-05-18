@@ -1,22 +1,21 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-  <%- include('../partials/errorMessage.ejs') %>
-  <%- include('../partials/greeting.ejs') %>
-  
-  <h2 class="page-header"><%= conductor.name %></h2>
-  <div class="details">
-    <div>
-      <div class="details-btn-grid">
-        <a class="btn btn-primary" href="/conductors/<%= conductor.idconductor %>/edit">Edit</a>
-        <%- include('../partials/deleteForm', { url: `/conductors/${conductor.idconductor}` }) %>
-        <a class="btn btn-primary" href="/drivers/<%= conductor.iddriver %>">View Driver</a>
-      </div>
-    </div>
-    <div class="details-grid">
-      <div class="details-label">Driver:</div>
-      <div><%= driver.name %></div>
-    </div>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+
+  <h2 class="page-header"><%= conductor.name %> (Conductor)</h2>
+  <div class="text-xl">Driver: <%= driver.name %></div>
+
+  <div class="flex justify-end">
+    <a
+      class="btn btn-primary mr-3"
+      href="/conductors/<%= conductor.idconductor %>/edit"
+      >Edit</a
+    >
+    <%- include('../partials/deleteForm', { url:
+    `/conductors/${conductor.idconductor}` }) %>
+    <a class="btn btn-primary ml-3" href="/drivers/<%= conductor.iddriver %>"
+      >View Driver</a
+    >
   </div>
-
 </div>
-

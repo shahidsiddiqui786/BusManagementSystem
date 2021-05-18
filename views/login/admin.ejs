@@ -1,22 +1,22 @@
-<h1>Login Screen</h1>
-<div class="inner-container">
-    <%- include('../partials/errorMessage.ejs') %>
-    <%- include('../partials/greeting.ejs') %>
-    <div class="row">
-        <h3>Admin Login</h3>
-        <form action="/login/admin" method="POST">
-            <div class="form-row">
-                <div class="form-item">
-                  <label>Name</label>
-                  <input type="text" name="name" required>
-                </div>
-                <div class="form-item">
-                    <label>Password</label>
-                    <input type="password" name="password" required>
-                  </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Login</button>
-        </form>
-    </div>
+<div class="inner-container flex items-center flex-col">
+  <h1 class="text-4xl my-4">BUS MANAGEMENT SYSTEM PORTAL</h1>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+  <div class="row">
+    <form action="/login/admin" method="POST">
+      <div class="mt-24">
+        <div class="form-item2">
+          <label>Name</label>
+          <input type="text" name="name" required />
+        </div>
+        <div class="form-item2">
+          <label>Password</label>
+          <input type="password" name="password" required />
+        </div>
+      </div>
+      <div class="flex justify-center mt-4">
+        <button class="btn btn-primary" type="submit">Login</button>
+      </div>
+    </form>
+  </div>
 </div>
-

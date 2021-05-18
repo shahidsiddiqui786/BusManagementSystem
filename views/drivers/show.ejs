@@ -1,13 +1,14 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-  <%- include('../partials/errorMessage.ejs') %>
-  <%- include('../partials/greeting.ejs') %>
-   
-  <h2 class="page-header"><%= driver.name %></h2>
-  <div class="btn-row">
-    <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>/edit">Edit</a>
-    <%- include('../partials/deleteForm',
-                { url: `/drivers/${driver.iddriver}` }) %>
-  </div>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
 
+  <h2 class="page-header"><%= driver.name %> (Driver)</h2>
+  <div class="flex justify-end">
+    <a class="btn btn-primary mr-3" href="/drivers/<%= driver.iddriver %>/edit"
+      >Edit</a
+    >
+    <%- include('../partials/deleteForm', { url: `/drivers/${driver.iddriver}`
+    }) %>
+  </div>
 </div>

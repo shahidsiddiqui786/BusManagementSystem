@@ -1,32 +1,41 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-  <%- include('../partials/errorMessage.ejs') %>
-  <%- include('../partials/greeting.ejs') %>
-  
-  <h2 class="page-header">Search Drivers</h2>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+
+  <div class="flex justify-between items-center">
+    <h2 class="page-header">Search Drivers</h2>
+    <a
+      class="px-5 py-2 rounded-full bg-gray-200 text-blue-600"
+      href="/drivers/add"
+      >+ Add Driver</a
+    >
+  </div>
   <form action="/drivers" method="GET">
     <div class="form-row">
       <div class="form-item">
         <label>Name</label>
-        <input type="text" name="name" value="<%= searchOptions.name %>">
+        <input type="text" name="name" value="<%= searchOptions.name %>" />
       </div>
     </div>
     <div class="form-row form-row-end">
       <button class="btn btn-primary" type="submit">Search</button>
     </div>
   </form>
-  <br>
+  <br />
   <% drivers.forEach(driver => { %>
-    <div class="general-row">
-      <div class="general-name"><%= driver.name %></div>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>">View</a>
-        <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>/edit">Edit</a>
-        <%- include('../partials/deleteForm',
-                    { url: `/drivers/${driver.iddriver}` }) %>
-      </div>
+  <div
+    class="general-row bg-blue-500 bg-opacity-30 p-3 rounded-xl items-center"
+  >
+    <div class="general-name"><%= driver.name %></div>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>">View</a>
+      <a class="btn btn-primary" href="/drivers/<%= driver.iddriver %>/edit"
+        >Edit</a
+      >
+      <%- include('../partials/deleteForm', { url: `/drivers/${driver.iddriver}`
+      }) %>
     </div>
+  </div>
   <% }) %>
-
 </div>
-

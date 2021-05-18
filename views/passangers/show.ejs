@@ -1,37 +1,41 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-    <%- include('../partials/errorMessage.ejs') %>
-    <%- include('../partials/greeting.ejs') %>
-     
-    <h2 class="page-header"><%= passanger.name %></h2>
-    <div class="details">
-      <div>
-        <div class="details-btn-grid">
-          <div class="btn-row">
-            <a class="btn btn-primary" href="/passangers/<%= passanger.idpassanger %>/edit">Edit</a>
-            <%- include('../partials/deleteForm',
-                        { url: `/passangers/${passanger.idpassanger}` }) %>
-          </div>
-        </div>
-      </div>
-      <div class="details-grid">
-        <% tickets.forEach(ticket => { %>
-            <div class="details-label">Transacation ID:</div>
-            <div><%= ticket.tid %></div>
-            <div class="details-label">Time:</div>
-            <div><%= ticket.time %></div>
-            <div class="details-label">No Of Ticket Booked:</div>
-            <div><%= ticket.ticket %></div>
-            <form action = "/transacts/remove/<%= ticket.idtransact %>"  method = "POST">
-              <div class="form-row form-row-end btn-row">
-                <a class="btn btn-primary" href="/buses/<%= ticket.idbus %>">Check Bus</a>
-                <button class="btn btn-danger" type="submit">Cancel Ticket</button>
-              </div>
-            </form>
-            <div></div>
-            <div class="details-label"></div>
-            <div></div>
-        <% }) %>
-      </div>
-    </div>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+
+  <h2 class="page-header"><%= passanger.name %> (Passenger)</h2>
+
+  <div class="flex justify-end">
+    <a
+      class="btn btn-primary mr-3"
+      href="/passangers/<%= passanger.idpassanger %>/edit"
+      >Edit</a
+    >
+    <%- include('../partials/deleteForm', { url:
+    `/passangers/${passanger.idpassanger}` }) %>
   </div>
+  <div class="flex flex-col mt-4">
+    <span class="text-xl">Tickets booked:</span>
+    <% tickets.forEach(ticket => { %>
+    <div class="details-grid p-3 bg-blue-500 bg-opacity-30 rounded-xl my-2">
+      <div class="details-label">Transacation ID:</div>
+      <div><%= ticket.tid %></div>
+      <div class="details-label">Time:</div>
+      <div><%= ticket.time %></div>
+      <div class="details-label">No Of Ticket Booked:</div>
+      <div><%= ticket.ticket %></div>
+      <form action="/transacts/remove/<%= ticket.idtransact %>" method="POST">
+        <div class="form-row form-row-end btn-row">
+          <a class="btn btn-primary" href="/buses/<%= ticket.idbus %>"
+            >Check Bus</a
+          >
+          <button class="btn btn-danger" type="submit">Cancel Ticket</button>
+        </div>
+      </form>
+      <div></div>
+      <div class="details-label"></div>
+      <div></div>
+    </div>
+    <% }) %>
+  </div>
+</div>

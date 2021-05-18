@@ -1,32 +1,44 @@
 <%- include('../partials/header.ejs') %>
 <div class="inner-container">
-  <%- include('../partials/errorMessage.ejs') %>
-  <%- include('../partials/greeting.ejs') %>
-   
-  <h2 class="page-header">Search Conductors</h2>
+  <%- include('../partials/errorMessage.ejs') %> <%-
+  include('../partials/greeting.ejs') %>
+
+  <div class="flex justify-between items-center">
+    <h2 class="page-header">Search Conductors</h2>
+    <a
+      class="px-5 py-2 rounded-full bg-gray-200 text-blue-600"
+      href="/conductors/add"
+      >+ Add Conductor</a
+    >
+  </div>
   <form action="/conductors" method="GET">
     <div class="form-row">
       <div class="form-item">
         <label>Name</label>
-        <input type="text" name="name" value="<%= searchOptions.name %>">
+        <input type="text" name="name" value="<%= searchOptions.name %>" />
       </div>
     </div>
     <div class="form-row form-row-end">
       <button class="btn btn-primary" type="submit">Search</button>
     </div>
   </form>
-  <br>
+  <br />
   <% conductors.forEach(conductor => { %>
-    <div class="general-row">
-      <div class="general-name"><%= conductor.name %></div>
-      
-      <div class="btn-row">
-        <a class="btn btn-primary" href="/conductors/<%= conductor.idconductor %>">View</a>
-        <a class="btn btn-primary" href="/conductors/<%= conductor.idconductor %>/edit">Edit</a>
-        
-      </div>
+  <div
+    class="general-row bg-blue-500 bg-opacity-30 p-3 rounded-xl items-center"
+  >
+    <div class="general-name"><%= conductor.name %></div>
+
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/conductors/<%= conductor.idconductor %>"
+        >View</a
+      >
+      <a
+        class="btn btn-primary"
+        href="/conductors/<%= conductor.idconductor %>/edit"
+        >Edit</a
+      >
     </div>
+  </div>
   <% }) %>
-
 </div>
-

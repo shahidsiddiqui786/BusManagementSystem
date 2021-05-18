@@ -9,7 +9,7 @@ router.get("/add", (req, res) => {
   fetchRequireAndRenderAddTransact(res);
 });
 
-router.get("", (req, res) => {
+router.get("/", (req, res) => {
   fetchTransactionsAndRenderIndex(res, "");
 });
 
@@ -238,7 +238,7 @@ function fetchTransaction(idtransact) {
 function fetchTransactions(searchOptions = "") {
   const my = new Promise((resolve, reject) => {
     db.query(
-      "select * from transact WHERE name LIKE ?",
+      "select * from transact WHERE tid LIKE ?",
       [searchOptions.name === undefined ? "%" : searchOptions.name + "%"],
       (err, result) => {
         if (err) {
