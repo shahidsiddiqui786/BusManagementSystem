@@ -20,7 +20,9 @@
   </div>
 
   <div class="flex justify-end mt-3">
-    <a class="btn btn-primary mr-3" href="/buses/<%= bus.idbus %>/edit">Edit</a>
+    <a class="btn btn-primary mr-3" href="/buses/<%= bus.idbus %>/edit">
+      <img src="../images/mode_edit_black_36dp.svg" alt="edit" />
+    </a>
     <%- include('../partials/deleteForm', { url: `/buses/${bus.idbus}` }) %>
     <a
       class="btn btn-primary ml-3"

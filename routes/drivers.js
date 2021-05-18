@@ -140,7 +140,7 @@ function postDriver(driver) {
       driver,
       (err, result) => {
         if (err) {
-          reject(err.sqlMessage);
+          reject(err.sqlMessage.split(":")[0]);
         } else {
           resolve(result);
         }
@@ -174,7 +174,7 @@ function deleteDriver(iddriver) {
       iddriver,
       (err, result) => {
         if (err) {
-          reject(err.sqlMessage);
+          reject(err.sqlMessage.split(':')[0]);
         } else {
           resolve(result);
         }

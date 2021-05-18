@@ -9,13 +9,6 @@ router.get("/admin", (req, res) => {
   });
 });
 
-router.get("/passanger", (req, res) => {
-  res.render("login/passanger");
-});
-
-router.get("/conductor", (req, res) => {
-  res.render("login/conductor");
-});
 
 router.post("/admin", (req, res) => {
   const user = req.body.name;

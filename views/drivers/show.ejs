@@ -6,7 +6,7 @@
   <h2 class="page-header"><%= driver.name %> (Driver)</h2>
   <div class="flex justify-end">
     <a class="btn btn-primary mr-3" href="/drivers/<%= driver.iddriver %>/edit"
-      >Edit</a
+      ><img src="../images/mode_edit_black_36dp.svg" alt="edit" /></a
     >
     <%- include('../partials/deleteForm', { url: `/drivers/${driver.iddriver}`
     }) %>

@@ -284,8 +284,12 @@ function bookTicket(res, ticket) {
   //check2
   fetchBus(ticket[2])
     .then((result) => {
-      if (result.capacity < tt) {
+      if(result.capacity === 0) {
         fetchRequireAndRenderAddTransact(res, "Bus already full!");
+        return;
+      }
+      else if (result.capacity < tt) {
+        fetchRequireAndRenderAddTransact(res, "Only "+result.capacity+" tickets left!");
         return;
       } else {
         const reserve = parseInt(result.reserved) + parseInt(tt);
@@ -444,7 +448,7 @@ function deleteTransact(idtransact) {
       idtransact,
       (err, result) => {
         if (err) {
-          reject(err.sqlMessage);
+          reject(err.sqlMessage.split(':')[0]);
         } else {
           resolve(result);
         }

@@ -240,7 +240,7 @@ function deleteConductor(idconductor) {
       idconductor,
       (err, result) => {
         if (err) {
-          reject(err.sqlMessage);
+          reject(err.sqlMessage.split(':')[0]);
         } else {
           resolve(result);
         }
