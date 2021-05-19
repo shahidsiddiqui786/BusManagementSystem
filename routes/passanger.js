@@ -214,7 +214,7 @@ function deletePassanger(idpassanger) {
       idpassanger,
       (err, result) => {
         if (err) {
-          reject(err.sqlMessage.split(':')[0]);
+          reject(err.sqlMessage);
         } else {
           resolve(result);
         }

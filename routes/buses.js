@@ -279,7 +279,7 @@ function deleteBus(idbus) {
   const my = new Promise((resolve, reject) => {
     db.query("DELETE FROM bus WHERE idbus = ?", idbus, (err, result) => {
       if (err) {
-        reject(err.sqlMessage.split(':')[0]);
+        reject(err.sqlMessage);
       } else {
         resolve(result);
       }

@@ -4,8 +4,12 @@ const db = require("../database/index");
 
 router.get("/admin", (req, res) => {
   res.render("login/admin", {
-    errorMessage: "",
-    greeting: "",
+  });
+});
+
+router.get("/logout", (req, res) => {
+  res.render("index", {
+    greeting: "Successfully log out from system",
   });
 });
 
