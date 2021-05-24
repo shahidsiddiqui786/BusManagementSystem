@@ -47,8 +47,7 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-let PORT = 3001
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log("server is running on port 3001");
 });
