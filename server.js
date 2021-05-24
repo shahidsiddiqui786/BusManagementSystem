@@ -5,6 +5,7 @@ app.use(express.json());
 const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
+require('dotenv').config()
 const db = require("./database/index");
 
 ///////////////////////////////////////////////////////////////////////
