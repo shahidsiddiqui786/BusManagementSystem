@@ -7,4 +7,10 @@ const db = mysql.createConnection({
   database: process.env.DATABASE_USER,
 });
 
+setInterval(function () {
+  db.query('SELECT 1');
+  console.log("Database alive");
+}, 5000);
+
+
 module.exports = db;
